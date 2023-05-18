@@ -1,22 +1,115 @@
+<!-- register.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="/static/js/scripts.js"></script>
+    <title>Register</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </nav>
-    </header>
-    <main>
-        <!-- Tasks -->
-    </main>
+    <h1>Register</h1>
+    <form method="POST" action="{{ url_for('register') }}">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="email" name="email" placeholder="Email" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <input type="submit" value="Register">
+    </form>
 </body>
 </html>
+
+<!-- login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST" action="{{ url_for('login') }}">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
+
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ current_user.username }}</h1>
+    <h2>Posts:</h2>
+    {% for post in posts %}
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+        <p>Date Posted: {{ post.date_posted }}</p>
+        <hr>
+    {% endfor %}
+</body>
+</html>
+
+<!-- admin.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+</head>
+<body>
+    {% if not current_user.is_admin %}
+        <p>Access Denied</p>
+    {% else %}
+        <h1>Admin Panel</h1>
+        <h2>Users:</h2>
+        {% for user in users %}
+            <h3>{{ user.username }}</h3>
+            <p>Email: {{ user.email }}</p>
+            <form method="POST" action="{{ url_for('admin') }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <input type="submit" value="{{ 'Deactivate' if user.is_active else 'Activate' }}">
+            </form>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
+
+<!-- blogs.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blogs</title>
+</head>
+<body>
+    <h1>Blogs</h1>
+    {% for post in posts %}
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p>Date Posted: {{ post.date_posted }}</p>
+        <hr>
+    {% endfor %}
+</body>
+</html>
+
+<!-- blog.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>Date Posted: {{ post.date_posted }}</p>
+</body>
+</html>
+
+<!-- new_post.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Post</title>
+</head>
+<body>
+    <h1>New Post</h1>
+    <form method="POST" action="{{ url_for('new_post')
